@@ -53,8 +53,11 @@ async function fetchPedidos() {
       row.innerHTML = `
         <td>${pedido.id_pedido}</td>
         <td>${pedido.id_usuario}</td>
-        <td>${pedido.estado}</td>
         <td>
+          <input type="text" value="${pedido.estado}" id="estado_${pedido.id_pedido}">
+        </td>
+        <td>
+          <button onclick="modificarPedido(${pedido.id_pedido})">Modificar</button>
           <button onclick="eliminarPedido(${pedido.id_pedido})">Eliminar</button>
         </td>
       `;
@@ -62,6 +65,47 @@ async function fetchPedidos() {
     });
   } catch (err) {
     console.error('Error al obtener pedidos:', err);
+    alert('Error al conectar con el servidor.');
+  }
+}
+
+function ajustarInterfazPorRol(rol) {
+  if (rol === 'Cocina') {
+    document.querySelectorAll('.btn-eliminar').forEach(btn => btn.style.display = 'none');
+  } else if (rol === 'Cliente') {
+    document.getElementById('listaPedidos').style.display = 'none';
+  }
+}
+
+// Al cargar la página
+const rolUsuario = 'Cocina'; // Simula el rol (obtenido del backend o localStorage)
+ajustarInterfazPorRol(rolUsuario);
+
+
+
+// Modificar un pedido
+async function modificarPedido(id) {
+  const estado = document.getElementById(`estado_${id}`).value;
+
+  try {
+    const response = await fetch(`http://localhost:4000/pedidos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ estado }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(error.error || 'Error al modificar pedido');
+      return;
+    }
+
+    alert('Pedido modificado exitosamente');
+    fetchPedidos();
+  } catch (err) {
+    console.error('Error al modificar pedido:', err);
     alert('Error al conectar con el servidor.');
   }
 }
