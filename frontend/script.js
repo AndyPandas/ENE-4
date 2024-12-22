@@ -1,4 +1,14 @@
-// Crear un nuevo pedido
+// Ajustar la interfaz según el rol del usuario
+function ajustarInterfazPorRol(rol) {
+  if (rol === 'Cocina') {
+    document.querySelectorAll('.btn-eliminar').forEach(btn => btn.style.display = 'none');
+    document.getElementById('crearPedidoForm').style.display = 'none'; // Ocultar formulario de creación
+  } else if (rol === 'Cliente') {
+    document.getElementById('listaPedidos').style.display = 'none'; // Ocultar lista de pedidos
+  }
+}
+
+// Crear un nuevo pedido (solo Cliente)
 document.getElementById('crearPedidoForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -28,7 +38,7 @@ document.getElementById('crearPedidoForm')?.addEventListener('submit', async (e)
   }
 });
 
-// Obtener todos los pedidos
+// Obtener todos los pedidos (Cocina y Administrador)
 async function fetchPedidos() {
   try {
     const response = await fetch('http://localhost:4000/pedidos', {
@@ -57,8 +67,8 @@ async function fetchPedidos() {
           <input type="text" value="${pedido.estado}" id="estado_${pedido.id_pedido}">
         </td>
         <td>
-          <button onclick="modificarPedido(${pedido.id_pedido})">Modificar</button>
-          <button onclick="eliminarPedido(${pedido.id_pedido})">Eliminar</button>
+          <button class="btn-modificar" onclick="modificarPedido(${pedido.id_pedido})">Modificar</button>
+          <button class="btn-eliminar" onclick="eliminarPedido(${pedido.id_pedido})">Eliminar</button>
         </td>
       `;
       pedidosList.appendChild(row);
@@ -69,21 +79,7 @@ async function fetchPedidos() {
   }
 }
 
-function ajustarInterfazPorRol(rol) {
-  if (rol === 'Cocina') {
-    document.querySelectorAll('.btn-eliminar').forEach(btn => btn.style.display = 'none');
-  } else if (rol === 'Cliente') {
-    document.getElementById('listaPedidos').style.display = 'none';
-  }
-}
-
-// Al cargar la página
-const rolUsuario = 'Cocina'; // Simula el rol (obtenido del backend o localStorage)
-ajustarInterfazPorRol(rolUsuario);
-
-
-
-// Modificar un pedido
+// Modificar un pedido (Cocina y Administrador)
 async function modificarPedido(id) {
   const estado = document.getElementById(`estado_${id}`).value;
 
@@ -110,7 +106,7 @@ async function modificarPedido(id) {
   }
 }
 
-// Eliminar un pedido
+// Eliminar un pedido (solo Administrador)
 async function eliminarPedido(id) {
   try {
     const response = await fetch(`http://localhost:4000/pedidos/${id}`, {
@@ -133,6 +129,10 @@ async function eliminarPedido(id) {
     alert('Error al conectar con el servidor.');
   }
 }
+
+// Simular el rol del usuario (cambiar según el caso)
+const rolUsuario = 'Cocina'; // Puede ser 'Administrador', 'Cocina', 'Cliente'
+ajustarInterfazPorRol(rolUsuario);
 
 // Cargar pedidos al inicio
 fetchPedidos();
