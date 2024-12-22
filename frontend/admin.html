@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administrador</title>
+  <title>Administración - Usuarios</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Panel del Administrador</h1>
-    <nav>
-      <a href="/login.html" onclick="logout()">Cerrar Sesión</a>
-    </nav>
-  </header>
-  <h2>Opciones Administrativas</h2>
-  <ul>
-    <li><a href="/usuarios.html">Gestión de Usuarios</a></li>
-    <li><a href="/roles.html">Gestión de Roles</a></li>
-    <li><a href="/pedidos.html">Gestión de Pedidos</a></li>
-  </ul>
+  <h1>Gestión de Usuarios</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody id="userList"></tbody>
+  </table>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar Sesión</title>
+  <title>Login - Restaurante Siglo XXI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="login-container">
-    <h1>Iniciar Sesión</h1>
+  <div class="container">
+    <h1>Restaurante Siglo XXI - Login</h1>
     <form id="loginForm">
-      <input type="email" id="email" placeholder="Correo Electrónico" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
-      <button type="submit">Entrar</button>
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" required>
+      
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" required>
+      
+      <button type="submit">Iniciar Sesión</button>
     </form>
-    <div id="error" class="error"></div>
+    <div id="errorMessage" class="error"></div>
   </div>
   <script src="script.js"></script>
 </body>

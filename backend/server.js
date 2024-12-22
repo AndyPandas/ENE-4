@@ -1,28 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./models/database'); // Conexión a la base de datos
+const { connectDB } = require('./models/database');
 
+// Inicializar aplicación
 const app = express();
 
-// Middlewares
-app.use(express.json()); // Para procesar JSON
-app.use(cors()); // Habilitar CORS
+// Middleware
+app.use(express.json()); // Procesar JSON
+app.use(cors()); // Permitir CORS
 
 // Conectar a la base de datos
 connectDB();
 
-// Importar rutas
-const usuariosRoutes = require('./routes/usuarios'); // Importar rutas de usuarios
+// Rutas
+const usuariosRoutes = require('./routes/usuarios');
+const pedidosRoutes = require('./routes/pedidos');
 
-// Usar rutas
-app.use('/usuarios', usuariosRoutes); // Registrar rutas de usuarios
+app.use('/usuarios', usuariosRoutes);
+app.use('/pedidos', pedidosRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
   res.send('Servidor corriendo correctamente');
 });
 
-// Iniciar el servidor
+// Iniciar servidor
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
