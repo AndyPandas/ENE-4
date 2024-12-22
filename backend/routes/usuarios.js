@@ -1,41 +1,35 @@
 const express = require('express');
-const { sql } = require('../models/database');
+const { sql } = require('../models/database'); // Importar conexión a la base de datos
 
 const router = express.Router();
 
-// Ruta para crear un nuevo usuario
+// Obtener todos los usuarios
+router.get('/', async (req, res) => {
+  try {
+    const pool = await sql.connect(); // Conectar a la base de datos
+    const result = await pool.query('SELECT * FROM Usuarios'); // Consultar tabla Usuarios
+    res.json(result.recordset); // Devolver datos en formato JSON
+  } catch (err) {
+    res.status(500).send(`Error al obtener usuarios: ${err.message}`);
+  }
+});
+
+// Crear un nuevo usuario
 router.post('/', async (req, res) => {
   const { nombre, email, password, id_rol } = req.body;
 
   try {
     const pool = await sql.connect();
-
-    // Verificar si el email ya existe
-    const result = await pool
-      .request()
-      .input('email', sql.VarChar, email)
-      .query('SELECT * FROM Usuarios WHERE email = @email');
-
-    if (result.recordset.length > 0) {
-      return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
-    }
-
-    // Insertar el nuevo usuario
-    const query = `
-      INSERT INTO Usuarios (nombre, email, password, id_rol)
-      VALUES (@nombre, @correo, @password, @id_rol)
-    `;
     await pool.request()
       .input('nombre', sql.VarChar, nombre)
-      .input('correo', sql.VarChar, email)
-      .input('password', sql.VarChar, password) // Contraseña en texto plano
+      .input('email', sql.VarChar, email)
+      .input('password', sql.VarChar, password)
       .input('id_rol', sql.Int, id_rol)
-      .query(query);
-
+      .query('INSERT INTO Usuarios (nombre, email, password, id_rol) VALUES (@nombre, @email, @password, @id_rol)');
     res.send('Usuario creado exitosamente');
   } catch (err) {
     res.status(500).send(`Error al crear usuario: ${err.message}`);
   }
 });
 
-module.exports = router;
+module.exports = router; // Exportar el enrutador

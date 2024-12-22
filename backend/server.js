@@ -1,21 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./models/database');
+const { connectDB } = require('./models/database'); // Conexión a la base de datos
 
 const app = express();
 
-// Middlewares globales
-app.use(express.json()); // Procesar datos JSON
-app.use(cors()); // Permitir solicitudes desde cualquier origen
+// Middlewares
+app.use(express.json()); // Para procesar JSON
+app.use(cors()); // Habilitar CORS
 
 // Conectar a la base de datos
 connectDB();
 
 // Importar rutas
-const usuariosRoutes = require('./routes/usuarios'); // Ruta de usuarios
+const usuariosRoutes = require('./routes/usuarios'); // Importar rutas de usuarios
 
-// Usar las rutas
-app.use('/usuarios', usuariosRoutes); // Asignar rutas de usuarios al prefijo /usuarios
+// Usar rutas
+app.use('/usuarios', usuariosRoutes); // Registrar rutas de usuarios
 
 // Ruta principal
 app.get('/', (req, res) => {
